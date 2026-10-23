@@ -1,6 +1,7 @@
 import json
 import os
 import threading
+import time
 from flask import Flask
 import telebot
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -236,4 +237,11 @@ if __name__ == "__main__":
   t.start()
 
   print("Bot is running with JSON Database & Selection Menu...")
-  bot.infinity_polling(skip_pending=True)
+  while True:
+    try:
+      bot.infinity_polling(
+          skip_pending_updates=True, timeout=10, long_polling_timeout=5
+      )
+    except Exception as e:
+      print(f"Polling Exception: {e}")
+      time.sleep(3)

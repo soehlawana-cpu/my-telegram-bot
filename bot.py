@@ -1,13 +1,29 @@
 import json
 import os
+import threading
+from flask import Flask
 import telebot
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+# --- Render ရဲ့ Free Web Service Port Error ကျော်ရန် Flask Server ---
+app = Flask("")
+
+
+@app.route("/")
+def home():
+  return "Bot is running online 24/7!"
+
+
+def run_flask():
+  port = int(os.environ.get("PORT", 8080))
+  app.run(host="0.0.0.0", port=port)
+
 
 # --- 1. CONFIGURATION ---
 BOT_TOKEN = "8699169443:AAFPbQJ2V2PjlY-gRRw2g52OdeeBwb6c9uM"
 ADMIN_TELEGRAM_ID = 1999290358
 
-# JSON ဖိုင်ရှိရာ လမ်းကြောင်း (Bot ဖိုင်နဲ့ တစ်နေရာတည်း ရှိရင် "songs.json" လို့ပဲ ထားလို့ရပါတယ်)
+# JSON ဖိုင်ရှိရာ လမ်းကြောင်း
 JSON_FILE_PATH = "songs.json"
 
 bot = telebot.TeleBot(BOT_TOKEN)
@@ -208,7 +224,12 @@ def search_sheets(message):
     )
 
 
-# --- 5. RUN BOT ---
+# --- 5. RUN BOT & FLASK SERVER ---
 if __name__ == "__main__":
+  # Flask Web Server ကို နောက်ကွယ် Thread အဖြစ် Run ပါမည်
+  t = threading.Thread(target=run_flask)
+  t.daemon = True
+  t.start()
+
   print("Bot is running with JSON Database & Selection Menu...")
   bot.infinity_polling(skip_pending=True)

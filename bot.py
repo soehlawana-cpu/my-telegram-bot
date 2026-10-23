@@ -1,4 +1,4 @@
-Import json
+import json
 import os
 import threading
 from flask import Flask
@@ -236,4 +236,4 @@ if __name__ == "__main__":
   t.start()
 
   print("Bot is running with JSON Database & Selection Menu...")
-  bot.infinity_polling(skip_pending=True) 
+  bot.infinity_polling(skip_pending_updates=True)

@@ -15,12 +15,15 @@ def home():
 
 
 def run_flask():
-  port = int(os.environ.get("PORT", 8080))
+  # Render standard $PORT ကို ဖတ်ယူရန် (Default: 10000 သို့မဟုတ် 8080)
+  port = int(os.environ.get("PORT", 10000))
   app.run(host="0.0.0.0", port=port)
 
 
 # --- 1. CONFIGURATION ---
-BOT_TOKEN = "8699169443:AAFPbQJ2V2PjlY-gRRw2g52OdeeBwb6c9uM"
+BOT_TOKEN = os.environ.get(
+    "BOT_TOKEN", "8699169443:AAFPbQJ2V2PjlY-gRRw2g52OdeeBwb6c9uM"
+)
 ADMIN_TELEGRAM_ID = 1999290358
 
 # JSON ဖိုင်ရှိရာ လမ်းကြောင်း
@@ -153,7 +156,8 @@ def callback_handler(call):
         bot.send_message(
             call.message.chat.id,
             f"❌ တောင်းပန်ပါတယ် ခင်ဗျာ။ '{row['song_title']}' နုတ်ဖိုင်ကို"
-            f" ဆာဗာမှ ရှာမတွေ့တော့ပါ (သို့မဟုတ်) ဖျက်ထားပါသည် ဆက်စပ်တာဝန်ရှိသူထံ အကြောင်းကြားထားပါပြီ။",
+            " ဆာဗာမှ ရှာမတွေ့တော့ပါ (သို့မဟုတ်) ဖျက်ထားပါသည်"
+            " ဆက်စပ်တာဝန်ရှိသူထံ အကြောင်းကြားထားပါပြီ။",
         )
 
         admin_alert_text = (
